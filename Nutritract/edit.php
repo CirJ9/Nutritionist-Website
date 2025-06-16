@@ -27,11 +27,13 @@ if (isset($_POST["submit"])) {
     $calories = $_POST['calories'];
     $protein = $_POST['protein'];
     $carbohydrates = $_POST['carbohydrates'];
+    $time = $_POST['time'];
+    $date = $_POST['date'];
 
     $update_stmt = $conn->prepare("UPDATE nutritract 
-        SET meal_name = ?, food_name = ?, kilograms = ?, calories = ?, protein = ?, carbohydrates = ? 
+        SET meal_name = ?, food_name = ?, kilograms = ?, calories = ?, protein = ?, carbohydrates = ?, time = ?, date = ? 
         WHERE meal_num = ?");
-    $update_stmt->bind_param("ssddddi", $meal_name, $food_name, $kilograms, $calories, $protein, $carbohydrates, $meal_num);
+    $update_stmt->bind_param("ssddddssi", $meal_name, $food_name, $kilograms, $calories, $protein, $carbohydrates , $time, $date, $meal_num);
 
     if ($update_stmt->execute()) {
         header("Location: index.php?msg=Data updated successfully");
@@ -77,24 +79,36 @@ if (isset($_POST["submit"])) {
           </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">Kilograms:</label>
-          <input type="number" step="0.01" class="form-control" name="kilograms" value="<?php echo htmlspecialchars($row['kilograms']); ?>" required>
-        </div>
+        <div class="row mb-3">
+          <div class="col-6 col-md-4">
+            <label class="form-label">Kilograms:</label>
+            <input type="number" step="0.01" class="form-control form-control-sm" name="kilograms" value="<?php echo htmlspecialchars($row['kilograms']); ?>" required>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">Calories:</label>
-          <input type="number" class="form-control" name="calories" value="<?php echo htmlspecialchars($row['calories']); ?>" required>
-        </div>
+          <div class="col-6 col-md-4">
+            <label class="form-label">Calories:</label>
+            <input type="number" class="form-control form-control-sm" name="calories" value="<?php echo htmlspecialchars($row['calories']); ?>" required>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">Protein:</label>
-          <input type="number" class="form-control" name="protein" value="<?php echo htmlspecialchars($row['protein']); ?>" required>
-        </div>
+          <div class="col-6 col-md-4">
+            <label class="form-label">Protein:</label>
+            <input type="number" class="form-control form-control-sm" name="protein" value="<?php echo htmlspecialchars($row['protein']); ?>" required>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">Carbohydrates:</label>
-          <input type="number" class="form-control" name="carbohydrates" value="<?php echo htmlspecialchars($row['carbohydrates']); ?>" required>
+          <div class="col-6 col-md-4">
+            <label class="form-label">Carbohydrates:</label>
+            <input type="number" class="form-control form-control-sm" name="carbohydrates" value="<?php echo htmlspecialchars($row['carbohydrates']); ?>" required>
+          </div>
+
+          <div class="col-6 col-md-4">
+            <label class="form-label">Time:</label>
+            <input type="time" class="form-control form-control-sm" name="time" value="<?php echo htmlspecialchars($row['time']); ?>" required>
+          </div>
+
+          <div class="col-6 col-md-4">
+            <label class="form-label">Date:</label>
+            <input type="date" class="form-control form-control-sm" name="date" value="<?php echo htmlspecialchars($row['date']); ?>" required>
+          </div>
         </div>
 
         <div>
@@ -108,8 +122,4 @@ if (isset($_POST["submit"])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
-fix it
 

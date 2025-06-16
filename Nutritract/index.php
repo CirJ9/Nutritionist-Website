@@ -46,8 +46,10 @@ include "db_conn.php";
           <th scope="col">Food Name</th>
           <th scope="col">Kilograms</th>
           <th scope="col">Calories</th>
-           <th scope="col">Protein</th>
-            <th scope="col">Carbohydrates</th>
+          <th scope="col">Protein</th>
+          <th scope="col">Carbohydrates</th>
+          <th scope="col">Time</th>
+          <th scope="col">Date</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
@@ -65,6 +67,8 @@ include "db_conn.php";
             <td><?php echo $row["calories"] ?></td>
             <td><?php echo $row["protein"] ?></td>
             <td><?php echo $row["carbohydrates"] ?></td>
+            <td><?php echo $row["time"] ?></td>
+            <td><?php echo $row["date"] ?></td>
             <td>
               <a href="edit.php?meal_num=<?php echo $row["meal_num"] ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
               <a href="delete.php?meal_num=<?php echo $row["meal_num"] ?>" class="link-dark"><i class="fa-solid fa-trash fs-5"></i></a>
