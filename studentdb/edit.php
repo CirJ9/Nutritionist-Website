@@ -2,13 +2,21 @@
 include "db_conn.php";
 $id = $_GET["id"];
 
+// Handle form submission
 if (isset($_POST["submit"])) {
   $first_name = $_POST['first_name'];
   $last_name = $_POST['last_name'];
   $email = $_POST['email'];
   $gender = $_POST['gender'];
+  $department_id = $_POST['department_id'];
 
-  $sql = "UPDATE `student_tb` SET `first_name`='$first_name',`last_name`='$last_name',`email`='$email',`gender`='$gender' WHERE id = $id";
+  $sql = "UPDATE student_tb SET 
+            first_name = '$first_name',
+            last_name = '$last_name',
+            email = '$email',
+            gender = '$gender',
+            department_id = $department_id 
+          WHERE id = $id";
 
   $result = mysqli_query($conn, $sql);
 
@@ -19,85 +27,67 @@ if (isset($_POST["submit"])) {
   }
 }
 
+// Fetch current student data
+$sql = "SELECT * FROM student_tb WHERE id = $id LIMIT 1";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <title>CvSU Student Information </title>
+  <title>Edit Student</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="db.css">
 </head>
-
 <body>
-  <nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #00ff5573;">
-   CvSU Student Information
-  </nav>
+<nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #00ff5573;">
+   Edit Student Record
+</nav>
 
-  <div class="container">
-    <div class="text-center mb-4">
-      <h3>Edit User Information</h3>
-      <p class="text-muted">Click update after changing any information</p>
+<div class="container">
+  <form method="post" style="width:50vw; min-width:300px;" class="mx-auto">
+    <div class="row mb-3">
+      <div class="col">
+        <label class="form-label">First Name</label>
+        <input type="text" class="form-control" name="first_name" value="<?= $row['first_name'] ?>" required>
+      </div>
+      <div class="col">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-control" name="last_name" value="<?= $row['last_name'] ?>" required>
+      </div>
     </div>
 
-    <?php
-    $sql = "SELECT * FROM `student_tb` WHERE id = $id LIMIT 1";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    ?>
-
-    <div class="container d-flex justify-content-center">
-      <form action="" method="post" style="width:50vw; min-width:300px;">
-        <div class="row mb-3">
-          <div class="col">
-            <label class="form-label">First Name:</label>
-            <input type="text" class="form-control" name="first_name" value="<?php echo $row['first_name'] ?>">
-          </div>
-
-          <div class="col">
-            <label class="form-label">Last Name:</label>
-            <input type="text" class="form-control" name="last_name" value="<?php echo $row['last_name'] ?>">
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Email:</label>
-          <input type="email" class="form-control" name="email" value="<?php echo $row['email'] ?>">
-        </div>
-
-        <div class="form-group mb-3">
-          <label>Gender:</label>
-          &nbsp;
-          <input type="radio" class="form-check-input" name="gender" id="male" value="male" <?php echo ($row["gender"] == 'male') ? "checked" : ""; ?>>
-          <label for="male" class="form-input-label">Male</label>
-          &nbsp;
-          <input type="radio" class="form-check-input" name="gender" id="female" value="female" <?php echo ($row["gender"] == 'female') ? "checked" : ""; ?>>
-          <label for="female" class="form-input-label">Female</label>
-        </div>
-
-        <div>
-          <button type="submit" class="btn btn-success" name="submit">Update</button>
-          <a href="index.php" class="btn btn-danger">Cancel</a>
-        </div>
-      </form>
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" name="email" value="<?= $row['email'] ?>" required>
     </div>
-  </div>
 
+    <div class="form-group mb-3">
+      <label>Gender</label><br>
+      <input type="radio" name="gender" value="male" <?= $row['gender'] == 'male' ? 'checked' : '' ?>> Male
+      <input type="radio" name="gender" value="female" <?= $row['gender'] == 'female' ? 'checked' : '' ?>> Female
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <div class="mb-3">
+      <label class="form-label">Department</label>
+      <select class="form-select" name="department_id" required>
+        <option disabled>Select department</option>
+        <?php
+        $dept_sql = "SELECT * FROM department_tb";
+        $dept_result = mysqli_query($conn, $dept_sql);
+        while ($dept = mysqli_fetch_assoc($dept_result)) {
+          $selected = $dept['department_id'] == $row['department_id'] ? 'selected' : '';
+          echo "<option value='{$dept['department_id']}' $selected>{$dept['department_name']}</option>";
+        }
+        ?>
+      </select>
+    </div>
 
+    <button type="submit" name="submit" class="btn btn-primary">Update</button>
+    <a href="index.php" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
 </body>
-
 </html>
